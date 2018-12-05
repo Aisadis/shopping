@@ -52,3 +52,42 @@
   ###### 查看支付状态
 #### 八、线上部署
 ##### 阿里云部署
+##---------20181204-----------
+###远程分支的合并Dev分支
+ ~~~
+  git checkout dev
+  git pull origin
+  git checkout master
+  git merge dev 
+  git push origin master
+ ~~~
+ ## 数据库设计
+  ### 创建数据库
+    ```
+    create database shopping;
+    use shopping;
+    ```
+  ### 用户表
+   ```
+  create table user(
+   `id`        int(11) not null auto_increment comment'用户id',
+   `username`  varchar(50) not null comment '用户名',
+   `password`  varchar(50) not null comment '用户密码',
+   `email`     varchar(50) not null comment '用户邮箱',
+   `phone`     varchar(11) not null comment '用户电话',
+   `question`  varchar(100) not null comment '密保问题',
+   `answer`    varchar(100) not null comment '密保答案',
+   `role`      int(4)       not null comment '用户角色',
+   `create_time` datetime   comment '创建时间',
+   `update_time` datatime   comment '修改时间',
+    PRIMARY KEY(`id`),
+    UNIQUE KEY `user_name_index`(`username`)USING BTREE
+   )ENGINE=InnoDB  DEFAULT CHARSET=UTF-8
+   ```
+  ### 商品表
+  ### 类别表
+  ### 订单表
+  ### 购物车表
+  ### 订单明细表
+  ### 支付表
+  ### 收货地址
