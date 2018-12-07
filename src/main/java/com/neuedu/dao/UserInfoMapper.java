@@ -47,6 +47,7 @@ public interface UserInfoMapper {
     int updateByPrimaryKey(UserInfo record);
 
     int checkUsername(@Param("username") String username);
+    int checkEmail(String email);
 
     UserInfo selectUserByUsernameAndPassword(@Param("username") String username, @Param("password")String password);
 

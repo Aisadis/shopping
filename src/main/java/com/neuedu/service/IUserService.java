@@ -10,9 +10,14 @@ public interface IUserService {
      * @return
      */
     public ServerResponse register(UserInfo userInfo);
+
     /**
      *登录
      */
     public  ServerResponse login(String username,String password);
 
+    /**
+     * 检查邮箱或用户名是否有效
+     */
+     public ServerResponse check_valid(String str ,String type);
 }
