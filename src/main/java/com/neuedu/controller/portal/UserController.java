@@ -77,4 +77,27 @@ public class UserController {
         }
         return ServerResponse.createServerResponseByError(ResponseCode.USER_NOT_LOGIN.getStatus(),ResponseCode.USER_NOT_LOGIN.getMsg());
     }
+
+    /**
+     *根据用户获取密保问题
+     *
+     */
+    @RequestMapping(value = "forget_get_question.do")
+     public ServerResponse forget_get_question(String username){
+       return  userService.forget_get_question(username);
+     }
+    /**提交问题答案接口
+     */
+   @RequestMapping(value = "forget_get_answer.do")
+    public ServerResponse forget_get_answer(String username,String question, String answer){
+    return  userService.forget_get_answer(username,question,answer);
+    }
+
+    /**
+     * 修改密码
+     */
+    @RequestMapping(value = "forget_reset_password.do")
+    public ServerResponse forget_reset_password(String username,String passwordNew,String forgetToken){
+        return userService.forget_reset_password(username,passwordNew,forgetToken) ;
+    }
 }

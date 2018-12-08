@@ -56,6 +56,14 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+<!--//根据用户名修改密码-->
+  <update id="updatePasswordByUsername" parameterType="map">
+    update user set
+    password = #{password,jdbcType=VARCHAR},
+    update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where username = #{username,jdbcType=INTEGER}
+  </update>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
@@ -83,8 +91,17 @@
     select count(*) from user where email=#{email}
   </select>
   <select id="selectUserByUsernameAndPassword" parameterType="map" resultMap="BaseResultMap">
-select id, username, password, email, phone, question, answer, role, create_time,
+    select id, username, password, email, phone, question, answer, role, create_time,
     update_time
     from user where username=#{username} and password=#{password}
   </select>
+
+  <select id="selectQuestionByUsername" parameterType="string" resultType="string">
+    select question from user where username=#{username}
+  </select>
+  <select id="checkAnswerByUsernameAndQuestion" parameterType="map" resultMap="BaseResultMap">
+    select count(*) from user where username=#{username} and question=#{question} and answer=#{answer}
+  </select>
+
+
 </mapper>

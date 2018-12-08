@@ -3,6 +3,7 @@ package com.neuedu.service.impl;
 import com.neuedu.common.Const;
 import com.neuedu.common.ResponseCode;
 import com.neuedu.common.ServerResponse;
+import com.neuedu.common.TokenCache;
 import com.neuedu.dao.UserInfoMapper;
 import com.neuedu.pojo.UserInfo;
 import com.neuedu.service.IUserService;
@@ -10,6 +11,8 @@ import com.neuedu.utils.MD5Utils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl  implements IUserService {
@@ -128,5 +131,77 @@ public class UserServiceImpl  implements IUserService {
         //step3:返回结果
 
         return  ServerResponse.createServerResponseByError("type参数传递有误");
+    }
+
+    @Override
+    public ServerResponse forget_get_question(String username) {
+
+         //step1:参数非空校验
+       if (StringUtils.isBlank(username)){
+           return ServerResponse.createServerResponseByError(ResponseCode.PARAM_EMPTY.getStatus(),ResponseCode.PARAM_EMPTY.getMsg());
+       }
+        //step2:判断用户是否存在
+       ServerResponse serverResponse = check_valid(username,Const.USERNAME);
+       if (serverResponse.getStatus()!=ResponseCode.EXISTS_USERNAME.getStatus()){//用户名不存在
+           return ServerResponse.createServerResponseByError(ResponseCode.NOT_EXISTS_USERNAME.getStatus(),ResponseCode.NOT_EXISTS_USERNAME.getMsg());
+       }
+        //step3:查询密保问题
+        String question = userInfoMapper.selectQuestionByUsername(username);
+       if (StringUtils.isBlank(question)){
+           return ServerResponse.createServerResponseByError("密保问题为空");
+       }
+        //step4:返回结果
+
+        return ServerResponse.createServerResponseBySuccess(null,question);
+    }
+
+    @Override
+    public ServerResponse forget_get_answer(String username, String question, String answer) {
+
+        //step1:参数非空校验
+        if (StringUtils.isBlank(username)||StringUtils.isBlank(question)||StringUtils.isBlank(answer)){
+            return ServerResponse.createServerResponseByError("参数不能为空");
+        }
+
+        //step2:校验答案
+        int count = userInfoMapper.checkAnswerByUsernameAndQuestion(username,question,answer);
+           if (count<=0){
+               return ServerResponse.createServerResponseByError("答案错误");
+           }
+
+         //返回用户唯一标识
+      String user_token = UUID.randomUUID().toString();
+        TokenCache.put(username,user_token);
+
+        //step3:返回结果
+       return ServerResponse.createServerResponseBySuccess(null,user_token);
+    }
+
+    @Override
+    public ServerResponse forget_reset_password(String username, String passwordNew,String forgetToken) {
+        //step1：参数非空校验
+       if (StringUtils.isBlank(username)||StringUtils.isBlank(passwordNew)|| StringUtils.isBlank(forgetToken)){
+            return  ServerResponse.createServerResponseByError("参数不能为空");
+       }
+
+       //step:校验token
+        String token = TokenCache.get(username);
+       if (StringUtils.isBlank(token)){
+           return ServerResponse.createServerResponseByError("token不存在或者过期");
+       }
+       if (!token.equals(forgetToken)){
+           return ServerResponse.createServerResponseByError("token不一致");
+       }
+
+        //step2：更新密码
+        int count=  userInfoMapper.updatePasswordByUsername(username,MD5Utils.getMD5Code(passwordNew));
+        if (count<=0){
+           return ServerResponse.createServerResponseByError("密码修改失败");
+        }
+
+            //step3:返回结果
+
+            return ServerResponse.createServerResponseBySuccess();
+
     }
 }
