@@ -81,4 +81,76 @@
     create_time, update_time, detail
     from goods
   </select>
+
+  <update id="updateGoodsKeySelective" parameterType="com.neuedu.pojo.Goods">
+    update goods
+    <set>
+      <if test="typeId !=null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="name !=null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle !=null">
+        subtitle = #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="mainImage !=null">
+        main_image = #{mainImage,jdbcType=VARCHAR},
+      </if>
+      <if test="subImages!=null">
+        sub_images = #{subImages,jdbcType=VARCHAR},
+      </if>
+      <if test="price!=null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="stock!=null">
+        stock = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="status!=null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="detail!=null">
+        detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
+      update_time = now()
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="findGoodsByProductIdAndGoodsName" parameterType="map" resultMap="BaseResultMap">
+
+    select id, type_id, name, subtitle, main_image, sub_images, price, stock, status,
+    create_time, update_time, detail
+    from neuedu_product
+    <where>
+      <if test="goodsId!=null">
+        id=#{goodsId}
+      </if>
+      <if test="goodsName!=null">
+        and name like #{goodsName}
+      </if>
+
+    </where>
+  </select>
+
+  <select id="searchGoods" parameterType="map" resultMap="BaseResultMap">
+    select id, type_id, name, subtitle, main_image, sub_images, price, stock, pstatus,
+    create_time, update_time, detail
+    from goods
+    <where>
+      <if test="integerSet != null and integerSet.size>0">
+        and type_id IN
+        /*循环开始前加(   结束加) 每循环一次加一次,  */
+        <foreach collection="integerSet" item="type_id" open="(" separator="," close=")">
+          #{type_id}
+        </foreach>
+      </if>
+      <if test="keyword != null">
+        and name like #{keyword}
+      </if>
+
+    </where>
+  </select>
+
+
 </mapper>

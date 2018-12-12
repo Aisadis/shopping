@@ -11,7 +11,9 @@ import com.neuedu.utils.MD5Utils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 @Service
@@ -204,4 +206,29 @@ public class UserServiceImpl  implements IUserService {
             return ServerResponse.createServerResponseBySuccess();
 
     }
+
+    @Override
+    public ServerResponse reset_password(UserInfo userInfo, String passwordOld, String passwordNew) {
+
+        //step1:参数非空校验
+        if (StringUtils.isBlank(passwordOld)||StringUtils.isBlank(passwordNew)){
+            return ServerResponse.createServerResponseByError("参数不能为空");
+        }
+        //step2:校验旧密码是否
+        UserInfo userInfoOld=userInfoMapper.selectUserByUsernameAndPassword(userInfo.getUsername(),passwordOld);
+        if (userInfoOld==null){
+            return ServerResponse.createServerResponseByError("旧密码错误");
+        }
+        //step3:修改密码
+        int count =userInfoMapper.updatePasswordByUsername(userInfo.getUsername(),MD5Utils.getMD5Code(passwordNew));
+        //step4:返回结果
+        if (count<=0){
+            return ServerResponse.createServerResponseByError("旧密码修改失败");
+        }
+
+        return ServerResponse.createServerResponseBySuccess();
+
+    }
+
+
 }

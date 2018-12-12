@@ -63,4 +63,12 @@
     select id, parent_id, name, status, create_time, update_time
     from type
   </select>
+
+  <select id="findChildType" parameterType="int" resultMap="BaseResultMap">
+    select id, parent_id, name, status, create_time, update_time
+    from type
+    where parent_id=#{typeId}
+  </select>
+
+
 </mapper>

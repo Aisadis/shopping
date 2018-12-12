@@ -47,7 +47,7 @@ public interface UserInfoMapper {
     int updateByPrimaryKey(UserInfo record);
 
     int checkUsername(@Param("username") String username);
-    int checkEmail(String email);
+    int checkEmail(@Param("email")String email);
 
     UserInfo selectUserByUsernameAndPassword(@Param("username") String username, @Param("password")String password);
     /**
@@ -66,7 +66,8 @@ public interface UserInfoMapper {
     /**
      * 根据用户名更新密码
      */
-    int updatePasswordByUsername(@Param("username")String username,//map里边的key值
-                                 @Param("passwordNew")String passwordNew);
+    int updatePasswordByUsername( @Param("passwordNew")String passwordNew,
+                                  @Param("username")String username//map里边的key值
+    );
 
 }

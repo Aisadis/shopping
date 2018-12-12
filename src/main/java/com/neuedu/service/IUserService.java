@@ -41,4 +41,9 @@ public interface IUserService {
      */
     ServerResponse forget_reset_password(String username,String passwordNew,String forgetToken);
 
+    /**
+     * 登录状态下修改密码
+     */
+    ServerResponse reset_password(UserInfo userInfo,String passwordOld,String passwordNew);
+
 }

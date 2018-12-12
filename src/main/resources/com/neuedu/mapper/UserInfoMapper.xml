@@ -61,7 +61,7 @@
     update user set
     password = #{password,jdbcType=VARCHAR},
     update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where username = #{username,jdbcType=INTEGER}
+    where username = #{username,jdbcType=VARCHAR}
   </update>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -99,7 +99,7 @@
   <select id="selectQuestionByUsername" parameterType="string" resultType="string">
     select question from user where username=#{username}
   </select>
-  <select id="checkAnswerByUsernameAndQuestion" parameterType="map" resultMap="BaseResultMap">
+  <select id="checkAnswerByUsernameAndQuestion" parameterType="map" resultType="int" >
     select count(*) from user where username=#{username} and question=#{question} and answer=#{answer}
   </select>
 

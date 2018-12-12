@@ -19,7 +19,7 @@ public class TokenCache {
                 //当key 不存在时，调用该方法
                 @Override
                 public String load(String s) throws Exception {
-                    return null;
+                    return "null";
                 }
             });
 
