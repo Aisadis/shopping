@@ -14,7 +14,7 @@ public interface IGoodsService {
      * productId 商品id
      * pstatus 商品状态
      * **/
-    ServerResponse set_sale_status(Integer goodsId,Integer pstatus);
+    ServerResponse set_sale_status(Integer goodsId,Integer status);
     /**
      *后台- 查看商品详情
      * **/

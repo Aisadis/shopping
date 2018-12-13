@@ -117,11 +117,11 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="findGoodsByProductIdAndGoodsName" parameterType="map" resultMap="BaseResultMap">
+  <select id="findGoodsByGoodsIdAndGoodsName" parameterType="map" resultMap="BaseResultMap">
 
     select id, type_id, name, subtitle, main_image, sub_images, price, stock, status,
     create_time, update_time, detail
-    from neuedu_product
+    from goods
     <where>
       <if test="goodsId!=null">
         id=#{goodsId}
@@ -134,7 +134,7 @@
   </select>
 
   <select id="searchGoods" parameterType="map" resultMap="BaseResultMap">
-    select id, type_id, name, subtitle, main_image, sub_images, price, stock, pstatus,
+    select id, type_id, name, subtitle, main_image, sub_images, price, stock, status,
     create_time, update_time, detail
     from goods
     <where>

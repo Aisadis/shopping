@@ -215,7 +215,7 @@ public class GoodsSericeImpl implements IGoodsService {
         if (goodsName!=null && !goodsName.equals("")){
             goodsName="%"+goodsName+"%";
         }
-        List<Goods> goodsList = goodsMapper.findGoodsByProductIdAndGoodsName(goodsId,goodsName);
+        List<Goods> goodsList = goodsMapper.findGoodsByGoodsIdAndGoodsName(goodsId,goodsName);
         List<GoodsListVo> goodsListVoList = Lists.newArrayList();
         if (goodsList!=null &&goodsList.size()>0){
             for (Goods goods : goodsList) {
@@ -261,7 +261,7 @@ public class GoodsSericeImpl implements IGoodsService {
             //上传到图片服务器
             Map<String ,String> map = Maps.newHashMap();
             map.put("uri",newFileName);
-            map.put("uri",PropertiesUtils.readByKey("imagHost")+"/"+newFileName);
+            map.put("uri",PropertiesUtils.readByKey("imageHost")+"/"+newFileName);
             return ServerResponse.createServerResponseBySuccess(null,map);
         } catch (IOException e) {
             e.printStackTrace();

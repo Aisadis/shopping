@@ -53,7 +53,7 @@ public interface GoodsMapper {
     /**
      * 按照productId或者productName查询
      * **/
-    List<Goods> findGoodsByProductIdAndGoodsName(@Param("goodsId") Integer goodsId,
+    List<Goods> findGoodsByGoodsIdAndGoodsName(@Param("goodsId") Integer goodsId,
                                                        @Param("goodsName") String goodsName);
 
     /**

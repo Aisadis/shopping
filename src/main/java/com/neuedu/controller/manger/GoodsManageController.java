@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping(value = "/marage/goods/")
+@RequestMapping(value = "/manage/goods/")
 public class GoodsManageController {
     @Autowired
     IGoodsService iGoodsService;
@@ -40,8 +40,8 @@ public class GoodsManageController {
      * 产品的上下架
      **/
     @RequestMapping(value = "set_sale_status.do")
-    public ServerResponse set_sale_status(HttpSession session, Integer productId,
-                                          Integer pstatus) {
+    public ServerResponse set_sale_status(HttpSession session, Integer goodsId,
+                                          Integer status) {
         //判断用户是否登录，并且有管理员权限
         UserInfo userInfo = (UserInfo) session.getAttribute(Const.CURRENTUSER);
         if (userInfo == null) {
@@ -51,42 +51,15 @@ public class GoodsManageController {
             return ServerResponse.createServerResponseByError(ResponseCode.NO_PRIVILEGE.getStatus(), ResponseCode.NO_PRIVILEGE.getMsg());
         }
         //调用service层增加或者更新
-        return iGoodsService.set_sale_status(productId, pstatus);
+        return iGoodsService.set_sale_status(goodsId, status);
     }
 
-    @RestController
-    @RequestMapping(value = "/product/")
-    public class ProductController {
-
-        @Autowired
-        IGoodsService iGoodsService;
-
-        /**
-         * 前台-商品详情
-         */
-        @RequestMapping(value = "detail.do")
-        public ServerResponse detail(Integer productId) {
-            return iGoodsService.detail_portal(productId);
-        }
-
-        /**
-         * 前台-搜索并排序
-         **/
-        @RequestMapping(value = "list.do")
-        public ServerResponse list(@RequestParam(required = false) Integer typeId,
-                                   @RequestParam(required = false) String keyword,
-                                   @RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                                   @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                   @RequestParam(required = false, defaultValue = "") String orderBy) {
-
-            return iGoodsService.list_portal(typeId, keyword, pageNum, pageSize, orderBy);
-        }
 
         /**
          * 查看商品详情
          **/
         @RequestMapping(value = "detail.do")
-        public ServerResponse detail(HttpSession session, Integer goodId) {
+        public ServerResponse detail(HttpSession session, Integer goodsId) {
             //判断用户是否登录，并且有管理员权限
             UserInfo userInfo = (UserInfo) session.getAttribute(Const.CURRENTUSER);
             if (userInfo == null) {
@@ -96,7 +69,7 @@ public class GoodsManageController {
                 return ServerResponse.createServerResponseByError(ResponseCode.NO_PRIVILEGE.getStatus(), ResponseCode.NO_PRIVILEGE.getMsg());
             }
             //调用service层增加或者更新
-            return iGoodsService.detail(goodId);
+            return iGoodsService.detail(goodsId);
         }
 
         /**
@@ -123,8 +96,8 @@ public class GoodsManageController {
          **/
         @RequestMapping(value = "search.do")
         public ServerResponse search(HttpSession session,
-                                     @RequestParam(value = "productId", required = false) Integer typeId,
-                                     @RequestParam(value = "productName", required = false) String goodsName,
+                                     @RequestParam(value = "goodsId", required = false) Integer typeId,
+                                     @RequestParam(value = "goodsName", required = false) String goodsName,
                                      @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
                                      @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
             //判断用户是否登录，并且有管理员权限
@@ -139,5 +112,6 @@ public class GoodsManageController {
             return iGoodsService.search(typeId, goodsName, pageNum, pageSize);
         }
 
+
     }
-}
+
